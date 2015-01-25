@@ -1,0 +1,114 @@
+<html>
+<head>
+	<title>Keyboard</title>
+	<style type="text/css">
+		
+		#instruments {
+			margin-top:200px;
+			height:300px;
+		}
+		label {
+			margin-top:50px;
+			display:block;
+			text-align: center;
+		}
+		video#bgvid {
+			position: fixed; right: 0; bottom: 0;
+			min-width: 100%; min-height: 100%;
+			width: auto; height: auto; z-index: -100;
+			background-size: cover;
+		}
+	</style>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		document.onkeydown = function(e) 
+		{
+			console.log('Key Pressed: ', e.keyCode);
+		}
+
+		// Instruments
+
+		var piano = 
+		{
+			"65":"C3.wav", "83":"D3.wav", "68":"E3.wav", "70":"F3.wav", "71":"G3.wav", "72":"A3.wav", "74":"B3.wav", "75":"C4.wav", "76":"D4.wav"
+		}
+
+		var drums =
+		{
+			"65":"kick-vinyl01.wav", "83":"kick-vinyl02.wav", "68":"snare-acoustic01.wav", "70":"snare-block.wav", "71":"shaker-shuffle.wav", "87":"clap-slapper.wav", "69":"clap-fat.wav", "81":"clap-808.wav", "82":"symbol3.wav", "84":"symbol2.wav", "89":"symbol.wav", "90":"kick-stomp.wav", "88":"tom-analog.wav", "67":"tom-fm.wav", "86":"tom-lofi.wav"
+		}
+
+		// Looping
+
+		var recording = false;
+
+		var loop = 
+		{
+
+		}
+
+		function createRecording() {
+			while (recording == true) {
+
+			}
+		}
+
+		// Key Press
+
+		document.onkeydown = function(e)
+		{
+			console.log(e.keyCode);
+			if (e.keyCode == 187) {
+				recording ^= true;
+				if (recording == true) {
+					console.log(recording + " Recording...");
+					// createRecording();
+				} else {
+					console.log(recording + " Stopped Recording")
+				}
+			}
+			else if (document.getElementById('drums').checked && recording == true) {
+				var snd = new Audio(drums[e.keyCode]);
+				snd.play();
+				loop.push()
+			}
+			else if (document.getElementById('piano').checked && recording == true) {
+				var snd = new Audio(piano[e.keyCode]);
+				snd.play();
+			}
+			else if (document.getElementById('drums').checked && recording == false) {
+				var snd = new Audio(drums[e.keyCode]);
+				snd.play();
+			}
+			else if (document.getElementById('piano').checked && recording == false) {
+				var snd = new Audio(piano[e.keyCode]);
+				snd.play();
+			}
+		}
+
+		setInterval(function(){ /** code **/ }, 3000);
+
+
+});
+
+	</script>
+</head>
+<body>
+	<div id="instruments">
+		<!-- <label><input id="vocals" type="radio" name="instrument" value="vocals" checked>Vocals</label> -->
+		<label><input id="piano" type="radio" name="instrument" value="piano">Piano</label>
+		<label><input id="drums" type="radio" name="instrument" value="drums">Drums</label>
+	</div>
+	<video autoplay loop poster="background.png" id="bgvid">
+		<source src="http://andershede.com/wp-content/uploads/2014/08/NorthSide.webm" type="video/webm">
+	</video>
+	<audio>
+		<source src="#" type="audio/wav">
+			Audio Tag
+	</audio>
+</body>
+</html>
+
+
+

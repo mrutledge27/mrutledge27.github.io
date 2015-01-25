@@ -1,0 +1,210 @@
+<?php
+
+session_start();
+// var_dump($_SESSION); die();
+
+$name = $_SESSION['first_name'];
+
+?>
+
+
+<html>
+<head>
+	<title>Keyboard</title>
+	<style type="text/css">
+		* {
+			font-family:Copperplate Gothic Light;
+		}
+		h1 {
+			position: absolute;
+			left:50px;
+			top:0px;
+			z-index: -1;
+			font-weight:bold;
+		}
+		button {
+			background:lightgrey;
+			border-radius: 4px;
+			position: absolute;
+			right:50px;
+			top:35px;
+		}
+		#instruments {
+			margin-top:200px;
+			height:300px;
+		}
+		label {
+			margin-top:50px;
+			display:block;
+			text-align: center;
+		}
+		video#bgvid {
+			position: fixed; right: 0; bottom: 0;
+			min-width: 100%; min-height: 100%;
+			width: auto; height: auto; z-index: -100;
+			background-size: cover;
+		}
+	</style>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		document.onkeydown = function(e) 
+		{
+			console.log('Key Pressed: ', e.keyCode);
+		}
+
+		// Instruments
+
+		var piano = 
+		{
+			"65":"C3.wav", "83":"D3.wav", "68":"E3.wav", "70":"F3.wav", "71":"G3.wav", "72":"A3.wav", "74":"B3.wav", "75":"C4.wav", "76":"D4.wav"
+		}
+
+		var drums =
+		{
+			"65":"kick-vinyl01.wav", "83":"kick-vinyl02.wav", "68":"snare-acoustic01.wav", "70":"snare-block.wav", "71":"shaker-shuffle.wav", "87":"clap-slapper.wav", "69":"clap-fat.wav", "81":"clap-808.wav", "82":"symbol3.wav", "84":"symbol2.wav", "89":"symbol.wav", "90":"kick-stomp.wav", "88":"tom-analog.wav", "67":"tom-fm.wav", "86":"tom-lofi.wav"
+		}
+
+		/** Looping **/
+
+
+		// Boolean to activate/deactivate recording
+		var recording = false;
+
+
+		// Milliseconds in each loop
+		var measure = 800;
+
+		// Time(ms) that recorded began 
+		var start = 0;
+
+		// Time(ms) elapsed while recording was active
+		var elapsed = 0;
+
+		// Time(ms) that key was pressed
+		var pressed = 0;
+
+		// Position in loop interval that note will play
+		var position = 0;
+
+		// Incremented variable to add new index position
+		var note = 0;
+
+		// Incremented variable to transfer recordings to vinyl
+		var tracks = 0;
+
+		// Object to store notes active in recording
+		var loop = 
+		{
+
+		};
+
+		// Object to store looped notes
+		var vinyl =
+		{
+
+		};
+
+		// Determine note position in measure
+
+		function notePos (start, pressed, measure)
+		{
+			var position = ((start-pressed)%measure);
+			console.log("Position = " + position);
+			return position;
+		}
+
+		function createRecording() {
+			while (recording == true) {
+			}
+		}
+
+		// Key Press function
+
+		document.onkeydown = function(e)
+		{
+			console.log("Key = " + e.keyCode);
+			if (e.keyCode == 187) {
+				// Toggle recording boolean
+				recording ^= true;
+				if (recording == true) {
+					// createRecording();
+					start = new Date().getTime();
+					console.log(recording + " Recording...");
+				} else {
+					elapsed = new Date().getTime() - start;
+					console.log(recording + " Stopped Recording")
+					console.log("Elapsed = " + elapsed/1000 + "secs");
+					notePos(start, elapsed, measure);
+				}
+			}
+			if (e.keyCode == 49) {
+				vinyl[tracks] = loop;
+				loop = {};
+				tracks++;
+			}
+			else if (document.getElementById('drums').checked && recording == true) {
+				var snd = new Audio(drums[e.keyCode]);
+				snd.play();
+				var time = new Date().getTime();
+				// increment to add object in new index of loop 
+				note++;
+				// loop[note] = "position","notePos(start, time, measure)";
+				// console.log("Start = " + start + "Time = " + time + "Measure = " + measure);
+				loop[note] = {"key":e.keyCode, "position":notePos(start,time,measure)};
+				console.log(loop);
+			}
+			else if (document.getElementById('piano').checked && recording == true) {
+				var snd = new Audio(piano[e.keyCode]);
+				snd.play();
+				var time = new Date().getTime();
+				// increment to add object in new index of loop 
+				note++;
+				// loop[note] = "position","notePos(start, time, measure)";
+				// console.log("Start = " + start + "Time = " + time + "Measure = " + measure);
+				loop[note] = {"key":e.keyCode, "position":notePos(start,time,measure)};
+				console.log(loop);
+			}
+			else if (document.getElementById('drums').checked && recording == false) {
+				var snd = new Audio(drums[e.keyCode]);
+				snd.play();
+			}
+			else if (document.getElementById('piano').checked && recording == false) {
+				var snd = new Audio(piano[e.keyCode]);
+				snd.play();
+			}
+		}
+
+
+		/** VAR_DUMP LOOP OBJECT HERE **/
+
+		setInterval(function(){ 
+			// var snd = new Audio(drums[90]);
+			// 	snd.play();
+		}, measure);
+
+
+});
+
+	</script>
+</head>
+<body>
+	<h1>Loop</h1>
+	<p><?php echo "Hi, " . $name . "!" ?></p>
+	<button onclick="window.location='keyboard_process.php';">Log Out</button>
+	<div id="instruments">
+		<label><input id="piano" type="radio" name="instrument" value="piano">Piano</label>
+		<label><input id="drums" type="radio" name="instrument" value="drums">Drums</label>
+		<!-- <label><input id="vocals" type="radio" name="instrument" value="vocals">Vocals</label> -->
+	</div>
+	<video autoplay loop poster="background.png" id="bgvid">
+		<source src="http://andershede.com/wp-content/uploads/2014/08/NorthSide.webm" type="video/webm">
+	</video>
+	<audio>
+		<source src="#" type="audio/wav">
+	</audio>
+</body>
+</html>
+
+
+

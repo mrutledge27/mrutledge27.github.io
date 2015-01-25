@@ -1,0 +1,59 @@
+<?php
+
+session_start();
+
+var_dump($_SESSION);
+var_dump($_POST);
+
+?>
+
+
+<html>
+<head>
+	<title>Keyboard</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+	<style type="text/css">
+	form {
+		width:200px;
+	}
+	form * {
+		display: block;
+	}
+	</style>
+</head>
+<body>
+	<div class="container col-md-4 col-md-push-3 col-xs-4 col-xs-push-2"
+		<form action="keyboard_process.php" method="post">
+			<h2>Login</h2>
+			<p>Email: </p>
+			<input type="text" name="email">
+			<p>Password: </p>
+			<input type="text" name="password">
+			<br>
+			<input type="submit" value="Login">
+			<input type="hidden" name="action" value="login">
+		</form>
+	</div>
+	<div class="container col-md-4 col-md-push-3 col-xs-4 col-xs-push-2"
+		<form action="keyboard_process.php" method="post">
+			<h2>Register</h2>
+			<p>First Name: </p>
+			<input type="text" name="first_name">
+			<p>Last Name: </p>
+			<input type="text" name="last_name">
+			<p>Email: </p>
+			<input type="text" name="email">
+			<p>Password: </p>
+			<input type="password" name="password">
+			<p>Confirm Password: </p>
+			<input type="password" name="confirm_password">
+			<br>
+			<input type="submit" value="Register">
+			<input type="hidden" name="action" value="register">
+		</form>
+	</div>
+</body>
+</html>
